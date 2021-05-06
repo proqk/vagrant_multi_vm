@@ -1,0 +1,74 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# Example Multi-Box edited by Jessica Rankins 4/17/2017
+
+#환경변수(Directory를 위한). 현재 디렉토리+특정 이름의 디렉토리 붙임
+ADDITIONALFILES1 = Dir.pwd + "/VagrantMultiAdditionalFiles1"
+ADDITIONALFILES2 = Dir.pwd + "/VagrantMultiAdditionalFiles2"
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version.
+Vagrant.configure("2") do |config|
+
+  config.vm.synced_folder Dir.pwd, "/vagrant", disabled: true
+  config.vm.box = "hashicorp/precise64" #박스 설정
+
+  # Configure the Web Server 웹서버 설정
+  config.vm.define "WebBox1" do |web| #WebBox1를 web이라고 사용하겠다
+    web.vm.provider :virtualbox do |vb| #웹서버1의 provider는 버추얼 박스. 별명은 vb
+      vb.name = "WebBox1" #버추얼 박스의 이름
+      vb.memory = 1024 #메모리 1기가
+      vb.customize ["modifyvm", :id, "--description", "WebBox is an apache VM used to demonstrate Infrastructure as code principles via Vagrant. It is also used to demonstrate defining multiple machines in a single Vagrantfile."] #설정 등
+    end
+
+    # After vagrant up, should see VM's web page in browser at 192.168.3.5
+    #시스템, 운영체제 관련 설정
+    web.vm.network "private_network", ip: "192.168.3.5" #비공개 네트워크와 ip주소
+    web.vm.hostname = "Web1" #이름
+    web.vm.synced_folder ADDITIONALFILES1, "/var/www" #ADDITIONFILES1 - web1번 파일
+    web.vm.provision :shell, path: "web_provision.sh" #provision은 쉘로 할 거고, 경로는 이곳이다
+    #provision: 가상머신 생성 후 서비스를 제공할 수 있도록 준비된 설정을 진행하는 것
+
+    # display this message at end of vagrant up
+    config.vm.post_up_message = "Successfully started Web1"
+  end
+
+  # Configure the Web Server 웹서버 설정
+  config.vm.define "WebBox2" do |web| #WebBox2를 web이라고 사용하겠다
+    web.vm.provider :virtualbox do |vb| #웹서버2의 provider는 버추얼 박스. 별명은 vb
+      vb.name = "WebBox2" #버추얼 박스의 이름
+      vb.memory = 1024 #메모리 1기가
+      vb.customize ["modifyvm", :id, "--description", "WebBox is an apache VM used to demonstrate Infrastructure as code principles via Vagrant. It is also used to demonstrate defining multiple machines in a single Vagrantfile."] #설정 등
+    end
+
+    # After vagrant up, should see VM's web page in browser at 192.168.3.4
+    #시스템, 운영체제 관련 설정
+    web.vm.network "private_network", ip: "192.168.3.4" #비공개 네트워크와 ip주소
+    web.vm.hostname = "Web2" #이름
+    web.vm.synced_folder ADDITIONALFILES2, "/var/www" #ADDITIONFILES2 - web2번 파일
+    web.vm.provision :shell, path: "web_provision.sh" #provision은 쉘로 할 거고, 경로는 이곳이다
+
+    # display this message at end of vagrant up
+    config.vm.post_up_message = "Successfully started Web2"
+  end
+
+
+  # Configure the Database
+  config.vm.define "DBBox" do |db|
+    db.vm.provider :virtualbox do |vb|
+      vb.name = "DBBox"
+      vb.memory = 1024
+      vb.customize ["modifyvm", :id, "--description", "DBBox is a mysql VM used to demonstrate Infrastructure as code principles via Vagrant. It is also used to demonstrate defining multiple machines in a single Vagrantfile."]
+    end
+
+    #가상머신을 만든다->그 위에서 서비스 제공하는 provision 만든다->provision을 해 주기 위한 코드를 만들어서 업로드, 구동한다
+    #db provision: db를 생성할 때 db테이블 등을 만들어주는 기반 작업을 해 주는 provision
+    db.vm.hostname = "DB"
+    db.vm.provision :shell, path: "db_provision.sh"
+    db.vm.network "private_network", ip: "192.168.3.6" #프라이빗 네트워크와 ip
+   
+    # display this message at end of vagrant up
+    config.vm.post_up_message = "Successfully started DB." #성공하면 나오는 메시지
+  end
+  
+end    # End configuring

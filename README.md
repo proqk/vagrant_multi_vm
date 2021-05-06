@@ -1,8 +1,8 @@
 # vagrant-multi-apache-mysql
 
-Edited by Yu-jin Lee on 5/6/2021
-vagrant_multi_vm (main directory) : 1 DB, 1 Web server
-Vagrant_MultiServer (sub directory) : 1 DB with 2 tables, 2 Web servers(connected to each of the 2 DB tables)
+Edited by Yu-jin Lee on 5/6/2021    
+vagrant_multi_vm (main directory) : 1 DB, 1 Web server    
+Vagrant_MultiServer (sub directory) : 1 DB with 2 tables, 2 Web servers(connected to each of the 2 DB tables)    
 
 ---
 Edited by Hyung-Jong Kim on 4/8/2021

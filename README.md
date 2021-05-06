@@ -1,8 +1,13 @@
 # vagrant-multi-apache-mysql
 
+Edited by Yu-jin Lee on 5/6/2021
+vagrant_multi_vm (main directory) : 1 DB, 1 Web server
+Vagrant_MultiServer (sub directory) : 1 DB with 2 tables, 2 Web servers(connected to each of the 2 DB tables)
 
+---
 Edited by Hyung-Jong Kim on 4/8/2021
 
+---
 This project is a updated version of https://github.com/rankinjl/vagrant-multi-apache-mysql. 
 I just updated Some php codes to show the updated data. 
 
